@@ -28,7 +28,7 @@ const getSnippetById = async id => {
 	const snippet = await faunaClient.query(
 		q.Get(q.Ref(q.Collection("snippets"), id))
 	);
-	transformData(snippet);
+	return transformData(snippet);
 };
 
 const getSnippetsByUser = async userId => {
