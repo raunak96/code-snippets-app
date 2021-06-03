@@ -3,6 +3,13 @@ import faunadb from "faunadb";
 const faunaClient = new faunadb.Client({ secret: process.env.FAUNA_SECRET });
 const q = faunadb.query;
 
+const transformData = snippet => {
+	const x = { ...snippet };
+	x.id = x.ref.id;
+	delete x.ref; // no need of ref anymore as we have extrcted id
+	return x;
+};
+
 const getSnippets = async () => {
 	// Basically Mapping through all Documents inside collection
 	const { data } = await faunaClient.query(
@@ -12,11 +19,8 @@ const getSnippets = async () => {
 		)
 	);
 
-	const snippets = data.map(snippet => {
-		snippet.id = snippet.ref.id;
-		delete snippet.ref; // no need of ref anymore as we have extrcted id
-		return snippet;
-	});
+	const snippets = data.map(snippet => transformData(snippet));
+
 	return snippets;
 };
 
@@ -24,15 +28,24 @@ const getSnippetById = async id => {
 	const snippet = await faunaClient.query(
 		q.Get(q.Ref(q.Collection("snippets"), id))
 	);
-	snippet.id = snippet.ref.id;
-	delete snippet.ref;
-	return snippet;
+	transformData(snippet);
 };
 
-const createSnippet = async (code, language, description, name) => {
+const getSnippetsByUser = async userId => {
+	const { data } = await faunaClient.query(
+		q.Map(
+			q.Paginate(q.Match(q.Index("snippets_by_user"), userId)),
+			q.Lambda("snippet", q.Get(q.Var("snippet")))
+		)
+	);
+	const snippets = data.map(snippet => transformData(snippet));
+	return snippets;
+};
+
+const createSnippet = async (code, language, description, name, userId) => {
 	return await faunaClient.query(
 		q.Create(q.Collection("snippets"), {
-			data: { code, language, description, name },
+			data: { code, language, description, name, userId },
 		})
 	);
 };
@@ -55,6 +68,7 @@ export {
 	createSnippet,
 	getSnippets,
 	getSnippetById,
+	getSnippetsByUser,
 	updateSnippet,
 	deleteSnippet,
 };

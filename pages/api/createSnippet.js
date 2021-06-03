@@ -1,5 +1,9 @@
+import { getSession, withApiAuthRequired } from "@auth0/nextjs-auth0";
 import { createSnippet } from "../../utils/Fauna";
-export default async function handler(req, res) {
+
+export default withApiAuthRequired(async function handler(req, res) {
+	const session = getSession(req, res);
+	const userId = session.user.sub;
 	const { code, language, description, name } = req.body;
 	switch (req.method) {
 		case "POST": {
@@ -8,7 +12,8 @@ export default async function handler(req, res) {
 					code,
 					language,
 					description,
-					name
+					name,
+					userId
 				);
 				return res.status(201).json(createdSnippet);
 			} catch (error) {
@@ -20,4 +25,4 @@ export default async function handler(req, res) {
 		default:
 			return res.status(405);
 	}
-}
+});

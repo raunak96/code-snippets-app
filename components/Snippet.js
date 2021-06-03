@@ -2,8 +2,10 @@ import React from "react";
 import Code from "./Code";
 import Link from "next/link";
 import axios from "axios";
+import { useUser } from "@auth0/nextjs-auth0";
 
 export default function Snippet({ snippet, snippetDeleted }) {
+	const { user } = useUser();
 	const deleteSnippet = async () => {
 		try {
 			await axios.delete(`/api/snippet/${snippet.id}`);
@@ -24,12 +26,18 @@ export default function Snippet({ snippet, snippetDeleted }) {
 			</div>
 			<p className="text-gray-900 mb-4">{snippet.data.description}</p>
 			<Code code={snippet.data.code} />
-			<Link href={`/edit/${snippet.id}`}>
-				<a className="text-gray-800 mr-2">Edit</a>
-			</Link>
-			<button onClick={deleteSnippet} className="text-gray-800 mr-2">
-				Delete
-			</button>
+			{user?.sub === snippet.data.userId && (
+				<>
+					<Link href={`/edit/${snippet.id}`}>
+						<a className="text-gray-800 mr-2">Edit</a>
+					</Link>
+					<button
+						onClick={deleteSnippet}
+						className="text-gray-800 mr-2">
+						Delete
+					</button>
+				</>
+			)}
 		</div>
 	);
 }

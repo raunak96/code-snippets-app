@@ -33,7 +33,6 @@ export default function SnippetForm({ snippet }) {
 	};
 
 	const updateSnippet = async data => {
-		console.log("Update called");
 		const { code, language, description, name } = data;
 		const id = snippet.id;
 		try {
@@ -126,7 +125,7 @@ export default function SnippetForm({ snippet }) {
 				} text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2 disabled:opacity-50`}
 				type="submit"
 				disabled={snippet && !isDirty}>
-				Save
+				{snippet ? "Update" : "Save"}
 			</button>
 			<Link href="/">
 				<a className="mt-3 inline-block bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">

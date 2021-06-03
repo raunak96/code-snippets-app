@@ -1,3 +1,4 @@
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import Head from "next/head";
 import SnippetForm from "../components/SnippetForm";
 
@@ -16,3 +17,5 @@ export default function Home() {
 		</>
 	);
 }
+
+export const getServerSideProps = withPageAuthRequired();
