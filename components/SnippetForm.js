@@ -20,9 +20,9 @@ export default function SnippetForm({ snippet }) {
 	const createSnippet = async data => {
 		const { code, language, description, name } = data;
 		try {
-			await axios.post("/api/createSnippet", {
+			await axios.post("/api/snippet", {
 				code,
-				language,
+				language: language.toLowerCase(),
 				description,
 				name,
 			});
@@ -38,7 +38,7 @@ export default function SnippetForm({ snippet }) {
 		try {
 			await axios.put(`/api/snippet/${id}`, {
 				code,
-				language,
+				language: language.toLowerCase(),
 				description,
 				name,
 			});

@@ -1,4 +1,4 @@
-import { getSnippets } from "../../utils/Fauna";
+import { getSnippets } from "../../../utils/Fauna";
 
 const handler = async (req, res) => {
 	switch (req.method) {

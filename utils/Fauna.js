@@ -42,6 +42,17 @@ const getSnippetsByUser = async userId => {
 	return snippets;
 };
 
+const getSnippetsByLanguage = async language => {
+	const { data } = await faunaClient.query(
+		q.Map(
+			q.Paginate(q.Match(q.Index("snippets_by_language"), language)),
+			q.Lambda("snippet", q.Get(q.Var("snippet")))
+		)
+	);
+	const snippets = data.map(snippet => transformData(snippet));
+	return snippets;
+};
+
 const createSnippet = async (code, language, description, name, userId) => {
 	return await faunaClient.query(
 		q.Create(q.Collection("snippets"), {
@@ -69,6 +80,7 @@ export {
 	getSnippets,
 	getSnippetById,
 	getSnippetsByUser,
+	getSnippetsByLanguage,
 	updateSnippet,
 	deleteSnippet,
 };

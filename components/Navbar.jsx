@@ -35,7 +35,7 @@ const Navbar = () => {
 				)}
 				{user && !isLoading && (
 					<>
-						<Link href="/mySnippets">
+						<Link href="/snippets/me">
 							<span className="text-red-100 hover:underline cursor-pointer">
 								My Snippets
 							</span>
