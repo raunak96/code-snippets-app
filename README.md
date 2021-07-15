@@ -10,7 +10,7 @@ Source code for the [Next.js](https://nextjs.org/) project that uses Tailwind CS
 
 4. Different Commands for `CRUD` operations and querying can be found [here](https://docs.fauna.com/fauna/current/start/fql_for_sql_users.html).
 
-###AUTH0 SetUP
+### AUTH0 SetUP
 
 1. For Auth0-NextJs documentation, refer this [Github Repo](https://github.com/auth0/nextjs-auth0/blob/main/README.md).
 
